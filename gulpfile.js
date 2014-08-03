@@ -26,6 +26,9 @@ var del = require('del');
 var runSequence = require('run-sequence');
 var browserSync = require('browser-sync');
 var pagespeed = require('psi');
+var coffee = require('gulp-coffee')
+var coffeelint = require('gulp-coffeelint')
+var gutil = require('gulp-util')
 var reload = browserSync.reload;
 
 var AUTOPREFIXER_BROWSERS = [
@@ -49,6 +52,18 @@ gulp.task('jshint', function () {
     .pipe($.if(!browserSync.active, $.jshint.reporter('fail')));
 });
 
+// Lint CoffeeScript
+gulp.task('coffeelint', function(){
+  return gulp.src('app/scripts/**/*.coffee')
+  .pipe(coffeelint())
+  .pipe(coffeelint.reporter())
+});
+
+gulp.task('coffee', function(){
+  return gulp.src('app/scripts/**/*.coffee')
+  .pipe(coffee({bare:true}).on('error', gutil.log))
+  .pipe(gulp.dest('.tmp/'))
+})
 // Optimize Images
 gulp.task('images', function () {
   return gulp.src('app/images/**/*')
