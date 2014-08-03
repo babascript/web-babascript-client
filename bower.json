@@ -1,0 +1,26 @@
+{
+  "name": "webui-template",
+  "version": "0.1",
+  "homepage": "https://github.com/TakumiBaba/web-starter-kit",
+  "authors": [
+    "TakumiBaba <s09704tb@gmail.com>"
+  ],
+  "description": "web ui template forked by google/web-starter-kit",
+  "keywords": [
+    "template"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "backbone": "~1.1.2",
+    "bootstrap": "git://github.com/twbs/bootstrap.git#>=3.1.1",
+    "marionette": "~2.1.0",
+    "moment": "~2.8.1"
+  }
+}
