@@ -26,9 +26,11 @@ var del = require('del');
 var runSequence = require('run-sequence');
 var browserSync = require('browser-sync');
 var pagespeed = require('psi');
-var coffee = require('gulp-coffee')
-var coffeelint = require('gulp-coffeelint')
-var gutil = require('gulp-util')
+var coffee = require('gulp-coffee');
+var coffeelint = require('gulp-coffeelint');
+var gutil = require('gulp-util');
+var jade = require('gulp-jade');
+var rename = require('gulp-rename');
 var reload = browserSync.reload;
 
 var AUTOPREFIXER_BROWSERS = [
@@ -60,10 +62,13 @@ gulp.task('coffeelint', function(){
 });
 
 gulp.task('coffee', function(){
-  return gulp.src('app/scripts/**/*.coffee')
+  var path = "";
+  return gulp.src('app/**/*.coffee')
+  .pipe(rename(function(p){path = p.dirname}))
   .pipe(coffee({bare:true}).on('error', gutil.log))
-  .pipe(gulp.dest('.tmp/'))
+  .pipe(gulp.dest('.tmp/'+path))
 })
+
 // Optimize Images
 gulp.task('images', function () {
   return gulp.src('app/images/**/*')
@@ -109,6 +114,13 @@ gulp.task('styles', function () {
     .pipe($.size({title: 'styles'}));
 });
 
+// Compile jade to html
+gulp.task('jade', function(){
+  return gulp.src('app/**/*.jade')
+  .pipe(jade())
+  .pipe(gulp.dest("./tmp/"))
+});
+
 // Scan Your HTML For Assets & Optimize Them
 gulp.task('html', function () {
   var assets = $.useref.assets({searchPath: '{.tmp,app}'});
@@ -148,7 +160,7 @@ gulp.task('html', function () {
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
 // Watch Files For Changes & Reload
-gulp.task('serve', ['styles'], function () {
+gulp.task('serve', ['styles', 'coffeelint', 'coffee', 'jade'], function () {
   browserSync({
     notify: false,
     // Run as an https by uncommenting 'https: true'
@@ -160,6 +172,8 @@ gulp.task('serve', ['styles'], function () {
     }
   });
 
+  gulp.watch(['app/**/*.coffee'], coffeelint, coffee);
+  gulp.watch(['app/**/*.jade'], jade);
   gulp.watch(['app/**/*.html'], reload);
   gulp.watch(['app/styles/**/*.{scss,css}'], ['styles', reload]);
   gulp.watch(['app/scripts/**/*.js'], ['jshint']);
