@@ -27,10 +27,15 @@ var runSequence = require('run-sequence');
 var browserSync = require('browser-sync');
 var pagespeed = require('psi');
 var coffee = require('gulp-coffee');
+var coffeescript = require('coffee-script');
 var coffeelint = require('gulp-coffeelint');
 var gutil = require('gulp-util');
 var jade = require('gulp-jade');
 var rename = require('gulp-rename');
+// var browserify = require('gulp-browserify');
+var through = require('through');
+var source = require('vinyl-source-stream');
+var browserify = require('browserify');
 var reload = browserSync.reload;
 
 var AUTOPREFIXER_BROWSERS = [
@@ -67,7 +72,44 @@ gulp.task('coffee', function(){
   .pipe(rename(function(p){path = p.dirname}))
   .pipe(coffee({bare:true}).on('error', gutil.log))
   .pipe(gulp.dest('.tmp/'+path))
-})
+});
+
+// Browserify
+gulp.task('browserify', function(){
+  return browserify('./.tmp/scripts/app.js')
+  // .transform(function(file){
+  //   var data = "";
+  //   return through(function(buf){
+  //     data += buf;
+  //   }, function(){
+  //     this.queue(coffeescript.compile(data))
+  //     this.queue(null)
+  //   })
+  // })
+  .bundle()
+  .pipe(source('main.js'))
+  .pipe(gulp.dest('.tmp/scripts/'))
+});
+// gulp.task('browserify', function(){
+//   return gulp.src('.tmp/scripts/app.js')
+//   .pipe(browserify({
+//     insertGlobals: true,
+//     debug: true
+//   }))
+//   .pipe(gulp.dest('.tmp/scripts'))
+// });
+
+gulp.task('vendor', function(){
+  return browserify()
+  .require('backbone')
+  .bundle()
+  .pipe(source('vendor.js'))
+  .pipe(gulp.dest('.tmp/scripts/'));
+});
+
+gulp.task('lemon', ['coffeelint', 'coffee', 'browserify'], function(){
+  return 
+});
 
 // Optimize Images
 gulp.task('images', function () {
@@ -116,9 +158,11 @@ gulp.task('styles', function () {
 
 // Compile jade to html
 gulp.task('jade', function(){
+  var path = "";
   return gulp.src('app/**/*.jade')
   .pipe(jade())
-  .pipe(gulp.dest("./tmp/"))
+  .pipe(rename(function(p){path = p.dirname}))
+  .pipe(gulp.dest(".tmp/" + path));
 });
 
 // Scan Your HTML For Assets & Optimize Them
@@ -160,7 +204,7 @@ gulp.task('html', function () {
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
 // Watch Files For Changes & Reload
-gulp.task('serve', ['styles', 'coffeelint', 'coffee', 'jade'], function () {
+gulp.task('serve', ['styles', 'coffeelint', 'coffee', 'vendor', 'browserify', 'jade'], function () {
   browserSync({
     notify: false,
     // Run as an https by uncommenting 'https: true'
@@ -172,8 +216,8 @@ gulp.task('serve', ['styles', 'coffeelint', 'coffee', 'jade'], function () {
     }
   });
 
-  gulp.watch(['app/**/*.coffee'], coffeelint, coffee);
-  gulp.watch(['app/**/*.jade'], jade);
+  gulp.watch(['app/**/*.coffee'], ['coffeelint', 'coffee', 'browserify', reload]);
+  gulp.watch(['app/**/*.jade'], ['jade', reload]);
   gulp.watch(['app/**/*.html'], reload);
   gulp.watch(['app/styles/**/*.{scss,css}'], ['styles', reload]);
   gulp.watch(['app/scripts/**/*.js'], ['jshint']);
