@@ -1,8 +1,12 @@
+# web-ui-template
+
+this template is forked by google/web-starter-kit
+
 # [![Web Starter Kit](https://cloud.githubusercontent.com/assets/170270/3343034/ceef6e92-f899-11e3-96b9-5d9d69d97a00.png)](https://github.com/google/web-starter-kit/releases/latest)
 
 ## Overview
 
-[Web Starter Kit](http://developers.google.com/web/starter-kit) is a starting point for multi-screen web development. It encompasses opinionated recommendations on boilerplate and tooling for building an experience that [works great across multiple devices](http://google.github.io/web-starter-kit/hello-world/). We help you stay productive and aligned with the best practices outlined in Google's [Web Fundamentals](http://developers.google.com/web/fundamentals).  
+[Web Starter Kit](http://developers.google.com/web/starter-kit) is a starting point for multi-screen web development. It encompasses opinionated recommendations on boilerplate and tooling for building an experience that [works great across multiple devices](http://google.github.io/web-starter-kit/hello-world/). We help you stay productive and aligned with the best practices outlined in Google's [Web Fundamentals](http://developers.google.com/web/fundamentals).
 
 [![](https://cloud.githubusercontent.com/assets/170270/3343033/ceee251e-f899-11e3-9dd9-e313cf2522ec.png)](https://developers.google.com/web/starter-kit/ 'Features')
 
@@ -115,5 +119,5 @@ Contributions, questions and comments are all welcome and encouraged. For code c
 
 ## License
 
-Apache 2.0  
+Apache 2.0
 Copyright 2014 Google Inc
