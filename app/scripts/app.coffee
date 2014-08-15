@@ -1,9 +1,20 @@
 'use strict'
 
-Test = require './test'
 Backbone = require 'backbone'
-# backbone = require 'backbone'
-test = new Test()
-console.log test
-console.log test.hoge()
-console.log Backbone
+Backbone.$ = $ = require 'jquery'
+Marionette = require 'backbone.marionette'
+
+app = new Marionette.Application()
+
+app.addRegions
+  'header': '#header'
+  'main': '#main'
+  'settings': '#settings'
+  'login': '#login'
+  'error': '#error'
+
+console.log app
+
+app.API = 'http://linda.babascript.org'
+
+module.exports = app
