@@ -30,7 +30,6 @@ app.addInitializer ->
 
   app.client = new Client "takumibaba"
   app.client.on "get_task", (task) ->
-    console.log task
     app.task = new Model.Task
       key: task.key
       format: task.format || 'boolean'

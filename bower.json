@@ -22,6 +22,6 @@
     "bootstrap": "git://github.com/twbs/bootstrap.git#>=3.1.1",
     "marionette": "~2.1.0",
     "moment": "~2.8.1",
-    "bootstrap-sass-official": "~3.2.0+1"
+    "bootstrap-sass-official": "~3.2.0"
   }
 }

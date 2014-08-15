@@ -32,7 +32,7 @@ var coffeelint = require('gulp-coffeelint');
 var gutil = require('gulp-util');
 var jade = require('gulp-jade');
 var rename = require('gulp-rename');
-// var browserify = require('gulp-browserify');
+var gulpBrowserify = require('gulp-browserify');
 var through = require('through');
 var source = require('vinyl-source-stream');
 var browserify = require('browserify');
@@ -76,10 +76,20 @@ gulp.task('coffee', function(){
 
 // Browserify
 gulp.task('browserify', function(){
-  return browserify('./.tmp/scripts/main.js')
-  .bundle()
-  .pipe(source('start.js'))
+  return gulp.src('app/scripts/main.coffee', {read: false})
+  .pipe(gulpBrowserify({
+    transform: ['coffeeify'],
+    extensions: ['.coffee']
+  }))
+  .pipe(rename('main.js'))
   .pipe(gulp.dest('.tmp/scripts/'))
+  // gulp.src('app/scripts/main.coffee')
+  // .pipe(coffee({bare: true}).on('error', gutil.log))
+  // .pipe(gulp.dest('.tmp/scripts/'));
+  // return browserify('.tmp/scripts/main.js')
+  // .bundle()
+  // .pipe(source('start.js'))
+  // .pipe(gulp.dest('.tmp/scripts/'))
 });
 
 
@@ -193,7 +203,7 @@ gulp.task('html', function () {
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
 // Watch Files For Changes & Reload
-gulp.task('serve', ['styles', 'coffeelint', 'coffee', 'vendor', 'browserify', 'jade'], function () {
+gulp.task('serve', ['styles', 'coffeelint', 'vendor', 'browserify', 'jade'], function () {
   browserSync({
     notify: false,
     // Run as an https by uncommenting 'https: true'
@@ -205,7 +215,7 @@ gulp.task('serve', ['styles', 'coffeelint', 'coffee', 'vendor', 'browserify', 'j
     }
   });
 
-  gulp.watch(['app/**/*.coffee'], ['coffeelint', 'coffee', 'browserify', reload]);
+  gulp.watch(['app/**/*.coffee'], ['coffeelint', 'browserify', reload]);
   gulp.watch(['app/**/*.jade'], ['jade', reload]);
   gulp.watch(['app/**/*.html'], reload);
   gulp.watch(['app/styles/**/*.{scss,css}'], ['styles', reload]);
