@@ -76,7 +76,7 @@ gulp.task('coffee', function(){
 
 // Browserify
 gulp.task('browserify', function(){
-  return browserify('./.tmp/scripts/app.js')
+  return browserify('./.tmp/scripts/main.js')
   // .transform(function(file){
   //   var data = "";
   //   return through(function(buf){
@@ -87,7 +87,7 @@ gulp.task('browserify', function(){
   //   })
   // })
   .bundle()
-  .pipe(source('main.js'))
+  .pipe(source('start.js'))
   .pipe(gulp.dest('.tmp/scripts/'))
 });
 // gulp.task('browserify', function(){
@@ -99,9 +99,15 @@ gulp.task('browserify', function(){
 //   .pipe(gulp.dest('.tmp/scripts'))
 // });
 
+
 gulp.task('vendor', function(){
   return browserify()
-  .require('backbone')
+  .require('backbone').require('backbone.marionette')
+  .require('babascript-client')
+  .require('socket.io-client')
+  .require('linda-socket.io/lib/linda-socketio-client')
+  .require('jquery')
+  .require('events')
   .bundle()
   .pipe(source('vendor.js'))
   .pipe(gulp.dest('.tmp/scripts/'));
@@ -212,7 +218,7 @@ gulp.task('serve', ['styles', 'coffeelint', 'coffee', 'vendor', 'browserify', 'j
     //       will present a certificate warning in the browser.
     // https: true,
     server: {
-      baseDir: ['.tmp', 'app']
+      baseDir: ['.tmp', 'app', 'bower_components']
     }
   });
 

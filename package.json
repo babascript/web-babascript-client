@@ -44,7 +44,10 @@
   },
   "dependencies": {
     "backbone": "^1.1.2",
+    "backbone.marionette": "^2.1.0",
     "coffee-script": "^1.7.1",
-    "gulp-browserify": "^0.5.0"
+    "gulp-browserify": "^0.5.0",
+    "jquery": "^2.1.1",
+    "marionette": "0.0.0"
   }
 }
