@@ -7,8 +7,7 @@ Marionette = require 'backbone.marionette'
 class Controller extends Marionette.Controller
 
   to: (tuplespace)->
-    username = window.localStorage.getItem("username")
-    app.router.navigate "/#{username}/", true
+    app.router.navigate "/#{app.client.name}/", true
 
   top: (tuplespace)->
     app.main.currentView.changeView()
@@ -19,9 +18,6 @@ class Controller extends Marionette.Controller
     app.main.currentView.changeView app.task
 
   settings: ->
-
-  login: ->
-    app.login.show new Views.Login()
 
   cancel: ->
     console.log 'cancel'

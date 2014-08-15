@@ -6,7 +6,6 @@ Marionette = require 'backbone.marionette'
 class Router extends Marionette.AppRouter
   appRoutes:
     "": "to"
-    "login": "login"
     "settings": "settings"
     ":tuplespace": "to"
     ":tuplespace/": "top"

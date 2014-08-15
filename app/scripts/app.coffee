@@ -1,7 +1,6 @@
 'use strict'
 
 Backbone = require 'backbone'
-Backbone.$ = $ = require 'jquery'
 Marionette = require 'backbone.marionette'
 
 app = new Marionette.Application()

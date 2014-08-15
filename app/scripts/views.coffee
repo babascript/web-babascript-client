@@ -24,15 +24,11 @@ class BaseView extends Marionette.ItemView
     return false
 
   returnValue: (value, option={})->
-    # app = require('app')
     app.task = null
     app.client.emit 'cancel_task'
     app.client.returnValue value, option
-    window.plugins?.toast?.show "返り値: #{value}", "short", "center"
 
   cancel: ->
-    # app = require('app')
-    console.log app
     app.task = null
     app.client.emit 'cancel_task'
     app.client.cancel()
@@ -54,7 +50,6 @@ class HeaderView extends Marionette.ItemView
 
   cancelTask: ->
     # キャンセルビュー出す
-    # App = require('app')
     return if !App.task?
     # App.router.navigate "/#{App.username}/cancel"
     app.error.reset()
@@ -63,22 +58,12 @@ class HeaderView extends Marionette.ItemView
   settings: ->
     app.settings.show new SettingsView()
 
-  logout: ->
-    $.ajax
-      type: "DELETE"
-      url: "#{app.API}/api/session/logout"
-      xhrFields:
-        withCredentials: true
-    .always ->
-      window.location.reload()
-
 class SettingsView extends Marionette.ItemView
   template: '#settings-template'
   className: 'modal-dialog'
   ui:
     username: 'input#username'
     update: 'button.update'
-    logout: 'button.logout'
     close: 'button.close'
   events:
     "click @ui.update": 'update'
@@ -91,76 +76,9 @@ class SettingsView extends Marionette.ItemView
     @$el.modal()
     @logout()
     window.location.reload()
-  logout: ->
-    $.ajax
-      type: "DELETE"
-      url: "#{app.API}/api/session/logout"
-      xhrFields:
-        withCredentials: true
-    .always ->
-      window.location.reload()
   close: ->
     # require('app').settings.reset()
     # @$el.modal()
-
-class LoginView extends Marionette.ItemView
-  template: '#login-template'
-  className: 'modal-dialog'
-  style: ''
-  ui:
-    username: 'input#username'
-    password: 'input#password'
-    login: 'button.login'
-    signup: 'button.signup'
-  events:
-    "click @ui.login": 'login'
-    "click @ui.signup": 'signup'
-  login: ->
-    username = @ui.username.val()
-    password = @ui.password.val()
-    $.ajax
-      type: "POST"
-      url: "#{app.API}/api/session/login"
-      data:
-        username: username
-        password: password
-      xhrFields:
-        withCredentials: true
-    .done (res) ->
-      window.localStorage.setItem "username", username
-      app.router.navigate "/", true
-      window.location.reload()
-    .error ->
-      window.alert "invalid username or password "
-  signup: ->
-    console.log 'singnup'
-    username = @ui.username.val()
-    password = @ui.password.val()
-    $.ajax
-      type: "POST"
-      url: "#{app.API}/api/user/new"
-      data:
-        username: username
-        password: password
-      xhrFields:
-        withCredentials: true
-    .done (res) ->
-      window.localStorage.setItem "username", username
-      $.ajax
-        type: "POST"
-        url: "#{app.API}/api/session/login"
-        data:
-          username: username
-          password: password
-        xhrFields:
-          withCredentials: true
-      .done (res) ->
-        app.router.navigate "/", true
-        window.location.reload()
-      .error (error)->
-        window.alert "invalid username or password "
-    .error ->
-      window.alert "invalid username or password "
 
 class MainView extends Marionette.LayoutView
   template: '#main-template'
@@ -324,6 +242,5 @@ module.exports =
   Number: NumberView
   Void: VoidView
   Task: Task
-  Login: LoginView
   Settings: SettingsView
   ThrowError: ThrowErrorView

@@ -77,27 +77,10 @@ gulp.task('coffee', function(){
 // Browserify
 gulp.task('browserify', function(){
   return browserify('./.tmp/scripts/main.js')
-  // .transform(function(file){
-  //   var data = "";
-  //   return through(function(buf){
-  //     data += buf;
-  //   }, function(){
-  //     this.queue(coffeescript.compile(data))
-  //     this.queue(null)
-  //   })
-  // })
   .bundle()
   .pipe(source('start.js'))
   .pipe(gulp.dest('.tmp/scripts/'))
 });
-// gulp.task('browserify', function(){
-//   return gulp.src('.tmp/scripts/app.js')
-//   .pipe(browserify({
-//     insertGlobals: true,
-//     debug: true
-//   }))
-//   .pipe(gulp.dest('.tmp/scripts'))
-// });
 
 
 gulp.task('vendor', function(){
@@ -226,7 +209,6 @@ gulp.task('serve', ['styles', 'coffeelint', 'coffee', 'vendor', 'browserify', 'j
   gulp.watch(['app/**/*.jade'], ['jade', reload]);
   gulp.watch(['app/**/*.html'], reload);
   gulp.watch(['app/styles/**/*.{scss,css}'], ['styles', reload]);
-  gulp.watch(['app/scripts/**/*.js'], ['jshint']);
   gulp.watch(['app/images/**/*'], reload);
 });
 
